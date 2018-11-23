@@ -22,3 +22,12 @@ function GameState:Side(pn)
     if pn == PLAYER_1 then return -1 end
     return 1
 end
+
+function Actor:GetWheelTrans(offsetFromCenter)
+    self:x(offsetFromCenter*92);
+	self:rotationz(-45);
+	self:shadowlength(16);
+    self:zoom(.7);
+    
+    return self,offsetFromCenter,itemIndex,numItems
+end

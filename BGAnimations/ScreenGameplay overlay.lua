@@ -49,14 +49,14 @@ for player in ivalues(PlayerNumber) do
             Texture=THEME:GetPathG("Gameplay/Life Meter","Pills");
             InitCommand=function(self) self:Pix():pause():setstate(i-1) end;
             OnCommand=function(self)
-                self:xy( -108+(12*i),0 )
+                self:xy( -108+(12*i),0 ):shadowlength(6)
                 self:sleep(i / 20)
                 self:queuecommand("Anim")
             end;
             AnimCommand=function(self)
-                self:stoptweening()
+                self:hurrytweening(0.05)
 
-                self:sleep((2/GAMESTATE:GetSongBPS()))
+                self:sleep( ( (GAMESTATE:GetSongBPS()/4) /GAMESTATE:GetSongBPS()) )
                 self:accelerate(0.2/GAMESTATE:GetSongBPS())
                 self:addy(-8)
                 self:sleep(0.066/GAMESTATE:GetSongBPS())

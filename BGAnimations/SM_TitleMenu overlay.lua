@@ -29,8 +29,9 @@ local MenuChoices = {
     },
     {
         "Check For Update",
-        -- todo
-        function() end,
+        function()
+            GAMESTATE:ApplyGameCommand("urlnoexit,http://www.stepmania.com")
+        end,
     },
     {
         "Exit",
@@ -66,7 +67,7 @@ local function MainMenuChoices()
             self:stoptweening():linear(0.05)
             self:y( ItemPlacement+(Spacing*MenuIndex) )
         end;
-    }
+    };
 
     -- This will be out choices 
     for index,mch in ipairs( MenuChoices ) do
@@ -75,8 +76,7 @@ local function MainMenuChoices()
                 self:xy( _screen.cx, ItemPlacement+(Spacing*index) )
             end;
             Def.BitmapText{
-                Font="ABlO",
-                Text=string.upper(mch[1]);
+                Font="ABlO", Text=string.upper(mch[1]);
                 OnCommand=function(self)
                     self:shadowlength(3)
                 end;
