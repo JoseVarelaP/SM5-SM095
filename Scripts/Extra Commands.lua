@@ -23,11 +23,12 @@ function GameState:Side(pn)
     return 1
 end
 
-function Actor:GetWheelTrans(offsetFromCenter)
-    self:x(offsetFromCenter*92);
-	self:rotationz(-45);
-	self:shadowlength(16);
-    self:zoom(.7);
+function Actor:GetWheelTrans(offsetFromCenter,itemIndex,numItems)
+    self:x(offsetFromCenter*92):y(0)
+    if itemIndex == 5 then
+        self:xy((offsetFromCenter*92)+60,-60)
+    end
+	self:rotationz(-45):zoom(.7)
     
     return self,offsetFromCenter,itemIndex,numItems
 end

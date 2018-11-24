@@ -16,7 +16,7 @@ t.OnCommand=function(self)
     local NItems = THEME:GetMetric("MusicWheel","NumWheelItems")+2
 
     for i=1,NItems do
-        WheelTable[i]:GetChild("SongNormalPart"):GetChild("Banner"):shadowlength(10)
+        WheelTable[i]:GetChild("SongNormalPart"):GetChild("Banner"):shadowlengthx(7)
         for sec in ivalues(Items.Sections) do
             WheelTable[i]:GetChild(sec):strokecolor(Color.Black):maxwidth(250)
         end
@@ -24,7 +24,31 @@ t.OnCommand=function(self)
             WheelTable[i]:GetChild(sec):zoom(0)
         end
     end
+    --SCREENMAN:GetTopScreen():GetChild("MenuTimer"):visible(false)
     --DiffListRow:Center()
 end
+
+t.StartSelectingStepsMessageCommand=function(self)
+    local MWheel = SCREENMAN:GetTopScreen():GetChild("MusicWheel");
+    MWheel:stoptweening():linear(0.4):y(SCREEN_CENTER_Y+400 )
+end;
+
+local function ReloadWheelTween()
+    local MWheel = SCREENMAN:GetTopScreen():GetChild("MusicWheel");
+    MWheel:stoptweening():linear(0.3):y(SCREEN_CENTER_Y+450 )
+    :linear(0.3):y(SCREEN_CENTER_Y+109 )
+end
+
+t.NextGroupMessageCommand=function(self)
+    ReloadWheelTween()
+end;
+t.PreviousGroupMessageCommand=function(self)
+    ReloadWheelTween()
+end;
+
+t.SongUnchosenMessageCommand=function(self)
+    local MWheel = SCREENMAN:GetTopScreen():GetChild("MusicWheel");
+    MWheel:stoptweening():linear(0.3):y( SCREEN_CENTER_Y+109 )
+end;
 
 return t;

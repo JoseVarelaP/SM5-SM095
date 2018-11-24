@@ -15,7 +15,7 @@ local function DrawDifList(pn,diff)
 		InitCommand=cmd(player,pn;y,SCREEN_CENTER_Y-52);
 		OnCommand=cmd();
 		LoadFont("Arial Bold")..{
-			InitCommand=cmd(zoom,0.7;shadowlength,3);
+			InitCommand=cmd(zoom,0.6;shadowlength,3);
 			SetCommand=function(self)
 			local st=GAMESTATE:GetCurrentStyle():GetStepsType();
 			local song=GAMESTATE:GetCurrentSong();
@@ -83,6 +83,14 @@ t[#t+1] = Def.ActorFrame{
 	LoadActor("_bpm label") .. {
 		InitCommand=cmd(x,SCREEN_CENTER_X+267;y,SCREEN_CENTER_Y-77);
 		OffCommand=cmd(diffusealpha,0);
+		CurrentSongChangedMessageCommand=function(self)
+			local song = GAMESTATE:GetCurrentSong()
+			self:stoptweening():linear(0.5):diffuse(Color.White)
+			if song:HasSignificantBPMChangesOrStops() and not song:IsDisplayBpmConstant() then
+				self:diffusetopedge( color("#fb0000") )
+				:diffusebottomedge( color("#9d0000") )
+			end
+		end;
 	};
 	LoadFont("ABlO")..{
 		InitCommand=cmd(x,SCREEN_CENTER_X-290;y,SCREEN_CENTER_Y-106;horizalign,left;zoom,.736;diffuseshift;effectcolor1,1,1,1,1;effectcolor2,.5,.5,.5,1;effectperiod,2;shadowlength,4);
@@ -110,19 +118,57 @@ t[#t+1] = Def.ActorFrame{
 	};
 	LoadActor("header")..{
 		OnCommand=cmd(x,SCREEN_CENTER_X;y,SCREEN_CENTER_Y-190;shadowlength,4);
-		StartSelectingStepsMessageCommand=cmd(sleep,0.5;diffusealpha,0);
-		SongUnchosenMessageCommand=cmd(stoptweening;diffusealpha,1);
+		StartSelectingStepsMessageCommand=cmd(linear,0.5;diffusealpha,0);
+		SongUnchosenMessageCommand=cmd(stoptweening;linear,0.5;diffusealpha,1);
 	};
 	LoadActor("steps")..{
 		OnCommand=cmd(x,SCREEN_CENTER_X;y,SCREEN_CENTER_Y-190;shadowlength,4;diffusealpha,0);
-		StartSelectingStepsMessageCommand=cmd(addx,-SCREEN_WIDTH;diffusealpha,1;smooth,0.5;addx,SCREEN_WIDTH);
+		StartSelectingStepsMessageCommand=cmd(sleep,0.5;diffusealpha,1);
 		SongUnchosenMessageCommand=cmd(stoptweening;diffusealpha,0);
 	};
-	Def.Quad{
-		InitCommand=cmd(CenterX;y,SCREEN_CENTER_Y+107;setsize,SCREEN_WIDTH,200;diffuse,color("#000000");diffusealpha,0;draworder,1);
-		StartSelectingStepsMessageCommand=cmd(sleep,0.25;linear,0.5;diffusealpha,1);
-		SongUnchosenMessageCommand=cmd(stoptweening;decelerate,0.2;diffusealpha,0;);
+
+	LoadFont("ABlO")..{
+		OnCommand=function(self)
+			self:xy( SCREEN_CENTER_X,SCREEN_CENTER_Y-20 ):zoom(0.8):shadowlength(3)
+		end;
+		CurrentSongChangedMessageCommand=function(self)
+			local song = GAMESTATE:GetCurrentSong();
+			self:settext("")
+			if song then
+				self:settext( song:GetDisplayMainTitle() )
+			end
+		end;
 	};
+};
+
+t[#t+1] = Def.BitmapText{
+    Font="Arial Bold";
+    Text="&LEFT; &RIGHT; switch song     &UP; &DOWN; diferent group    &MENUUP; &MENUDOWN; different sort";
+    OnCommand=function(self)
+        self:xy(_screen.cx,_screen.cy+200):zoom(0.7)
+        :shadowlength(3):diffuseblink()
+	end;
+	StartSelectingStepsMessageCommand=function(self)
+		self:stoptweening():sleep(0.5):diffusealpha(0)
+	end;
+	SongUnchosenMessageCommand=function(self)
+		self:stoptweening():diffusealpha(1)
+	end;
+};
+
+t[#t+1] = Def.BitmapText{
+    Font="Arial Bold";
+    Text="User &UP; &DOWN; to change. Hold NEXT for Options menu.";
+    OnCommand=function(self)
+        self:xy(_screen.cx,_screen.cy+200):zoom(0.7)
+        :shadowlength(3):diffuseblink():diffusealpha(0)
+	end;
+	StartSelectingStepsMessageCommand=function(self)
+		self:stoptweening():sleep(0.5):diffusealpha(1)
+	end;
+	SongUnchosenMessageCommand=function(self)
+		self:stoptweening():diffusealpha(0)
+	end;
 };
 
 return t;

@@ -1,16 +1,9 @@
 local c;
 local player = Var "Player";
-local ShowComboAt = THEME:GetMetric("Combo", "ShowComboAt");
-local Pulse = function(self, param)
-	self:zoom(param.Zoom+0.2)
-	self:linear(0.15)
-	self:zoom(param.Zoom)
-end;
+local ShowComboAt = 5;
 
-local PulseNormal = function(self, param)
-	self:zoom(1.2)
-	self:linear(0.15)
-	self:zoom(1)
+local Pulse = function(self, param)
+	self:zoom(param.Zoom)
 end;
 
 local NumberMinZoom = 0.5
@@ -23,13 +16,13 @@ local t = Def.ActorFrame {
 	LoadFont( "Combo", "numbers" ) .. {
 		Name="Number";
 		OnCommand=function(self)
-			self:xy(0,-15):halign(1)
+			self:xy(0,-15):align(1,1):shadowlength(4)
 		end;
 	};
 	LoadActor("label") .. {
 		Name="Label";
 		OnCommand = function(self)
-			self:x(0):halign(0)
+			self:x(0):align(0,1):shadowlength(4)
 		end;
 	};
 
@@ -72,7 +65,6 @@ local t = Def.ActorFrame {
 		c.Label:finishtweening();
 		-- Pulse
 		Pulse( c.Number, param );
-		PulseNormal( c.Label, param );
 	end;
 };
 

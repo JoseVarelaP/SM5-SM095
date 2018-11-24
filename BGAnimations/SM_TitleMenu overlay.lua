@@ -120,7 +120,7 @@ t[#t+1] = LoadActor( THEME:GetPathG("","Logo/Logo.png") )..{
 
 t[#t+1] = LoadActor( THEME:GetPathG("","Logo/Max.png") )..{
     OnCommand=function(self)
-        self:xy(_screen.cx+140,_screen.cy-25):glowshift()
+        self:xy(_screen.cx+140,_screen.cy-25):glowshift():effectperiod(2)
         :zoomx(3):zoomy(0):sleep(0.5):linear(0.5):zoom(1)
     end
 };
@@ -129,14 +129,14 @@ t[#t+1] = Def.BitmapText{
     Font="black wolf";
     Text="v0.95";
     OnCommand=function(self)
-        self:xy(_screen.cx+220,_screen.cy+200)
+        self:xy(_screen.cx+245,_screen.cy+210)
         :diffuse(0.8,0.8,0.8,1):shadowlength(3)
     end
 };
 
 t[#t+1] = Def.BitmapText{
     Font="Arial Bold";
-    Text="Use UP DOWN to select, then press NEXT";
+    Text="Use &UP; &DOWN; to select, then press NEXT";
     OnCommand=function(self)
         self:xy(_screen.cx,_screen.cy+200):zoom(0.7)
         :shadowlength(3):diffuseblink()

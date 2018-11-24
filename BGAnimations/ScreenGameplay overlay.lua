@@ -7,6 +7,21 @@ local pos = {
     math.floor( scale(2.25/3,0,1,SCREEN_LEFT,SCREEN_RIGHT) )
 };
 
+t.OnCommand=function(self)
+    --[[
+        SM handles the background brightness by 3 quads, 2 by the sides and one in the middle.
+        let's grab all of them and slowly fade them back to normal when "Here We Go" begins.
+
+        Also don't worry about BG Videos or BG Animations breaking this method,
+        those are stored in another actorframe.
+    ]]
+    local test = SCREENMAN:GetTopScreen():GetChild("SongBackground"):GetChild("")
+    local BGBrightness = test:GetChild("")[5]:GetChild("BrightnessOverlay")
+    for i=1,3 do
+        BGBrightness[i]:diffuse(Color.Black):sleep(2):linear(0.2):diffuse(Color.White)
+    end
+end;
+
 for player in ivalues(PlayerNumber) do
     local pla = pname(player)
     local posset = pos[ tonumber( string.sub(pla, -1) ) ]
@@ -15,13 +30,15 @@ for player in ivalues(PlayerNumber) do
             self:xy( posset, _screen.cy+200 ):player(player)
             if GAMESTATE:IsPlayerEnabled(player) then
                 SCREENMAN:GetTopScreen():GetChild("Player"..pla):x( posset )
+                -- check Player Judgment for info
+                SCREENMAN:GetTopScreen():GetChild("Player"..pla):GetChild("Combo"):visible(false)
                 SCREENMAN:GetTopScreen():GetChild("Life"..pla):visible(false)
                 SCREENMAN:GetTopScreen():GetChild("Score"..pla):visible(false)
             end
         end;
 
         -- Score information.
-        -- Number fade is because the frame is on top
+        -- Number fade occurs is because the frame is on top
         Def.BitmapText{
             Font="Bold Numbers";
             OnCommand=function(self) self:y(-2):shadowlength(3) end;
@@ -41,7 +58,15 @@ for player in ivalues(PlayerNumber) do
     };
 
     LifeFrame[#LifeFrame+1] = LoadActor( THEME:GetPathG("Gameplay/Life Meter","Frame") )..{
-        OnCommand=function(self) self:Pix() end
+        OnCommand=function(self) self:Pix() end;
+        LifeChangedMessageCommand=function(self,params)
+            if (params.Player == player) then
+                self:stopeffect()
+                if params.LifeMeter:IsHot() then
+                    self:diffuseshift():effectperiod(0.3):effectcolor1(0.7,0.7,0.7,1):effectcolor2(1,1,1,1) 
+                end
+            end
+        end;
     };
     
     for i=1,17 do
@@ -54,10 +79,10 @@ for player in ivalues(PlayerNumber) do
                 self:queuecommand("Anim")
             end;
             AnimCommand=function(self)
-                self:hurrytweening(0.05)
+                --self:hurrytweening(0.05)
 
                 self:sleep( ( (GAMESTATE:GetSongBPS()/4) /GAMESTATE:GetSongBPS()) )
-                self:accelerate(0.2/GAMESTATE:GetSongBPS())
+                self:decelerate(0.2/GAMESTATE:GetSongBPS())
                 self:addy(-8)
                 self:sleep(0.066/GAMESTATE:GetSongBPS())
                 self:accelerate(0.2/GAMESTATE:GetSongBPS())
@@ -71,9 +96,6 @@ for player in ivalues(PlayerNumber) do
                     self:setstate(-1 + i)
                     :visible( pills >= i and true or false )
                     :stopeffect()
-                    if params.LifeMeter:IsHot() then
-                        self:glowshift():effectperiod(0.1):effectcolor1(1,1,1,0.4):effectcolor2(1,1,1,0) 
-                    end
 				end;
 			end;
         };
@@ -83,42 +105,3 @@ for player in ivalues(PlayerNumber) do
 end
 
 return t;
-
--- local PillDone = {};
--- for i=1,17 do    
---     PillDone[i] = false;
--- end
--- local function AllPillsDone()
---     local AllTotal = 0
---     print("AllTotal "..AllTotal)
---     for i=1,17 do
---         if PillDone[i] then
---             AllTotal = AllTotal + 1
---         end
---     end
---     print("AllTotal "..AllTotal)
---     return AllTotal == 17
--- end
-
--- BeginCommand=function(self) self:sleep(i/20):queuecommand("BounceNow") end;
--- CheckInfoCommand=function(self)
---     if AllPillsDone() then
---         PillDone[i] = false
---         self:queuecommand("BounceNow")
---     end
---     self:sleep(0.01):queuecommand("CheckInfo")
--- end;
--- BounceNowCommand=function(self)
---     local BPS = GAMESTATE:GetSongBPS()
---     self:finishtweening( 0.2/BPS )
---     self:sleep(2/BPS)
---     if not PillDone[i] then
---         PillDone[i] = true
--- 		self:accelerate(0.2/BPS)
--- 		self:addy(-8)
--- 		self:sleep(0.066/BPS)
--- 		self:accelerate(0.2/BPS)
---         self:addy(8)
---     end
---     self:queuecommand("CheckInfo")
--- end;

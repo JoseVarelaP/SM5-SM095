@@ -1,11 +1,5 @@
 local t = Def.ActorFrame{};
 
-t[#t+1] = LoadActor( THEME:GetPathV("","Menu BG") )..{
-    OnCommand=function(self)
-        self:Center():zoomtoheight( SCREEN_HEIGHT ):zoomtowidth(SCREEN_WIDTH):diffuse(0.8,0.8,0.8,1)
-    end
-};
-
 t[#t+1] = LoadActor( THEME:GetPathG("","Header/Results") )..{
     OnCommand=function(self)
         self:xy(_screen.cx,_screen.cy-180):zoom(0.8):shadowlength(4)

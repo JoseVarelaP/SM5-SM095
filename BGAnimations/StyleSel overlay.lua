@@ -142,7 +142,7 @@ local function MainMenuChoices()
                 end;
                 MenuUpAllValMessageCommand=function(self)
                     self:finishtweening()
-                    :stopeffect():linear(0.1)
+                    :stopeffect():linear(0.2)
                     :y( MenuIndex == index and -30 or 0 )
                     if MenuIndex == index then
                         self:wag():effectperiod(2):effectmagnitude(0,0,10)
@@ -181,12 +181,6 @@ local Controller = Def.ActorFrame{
     SCREENMAN:GetTopScreen():AddInputCallback(InputHandler) end;
 };
 
-t[#t+1] = LoadActor( THEME:GetPathV("","Menu BG") )..{
-    OnCommand=function(self)
-        self:Center():zoomtoheight( SCREEN_HEIGHT ):zoomtowidth(SCREEN_WIDTH):diffuse( 0.8,0.8,0.8,1 )
-    end
-};
-
 t[#t+1] = LoadActor( THEME:GetPathG("","Header/SelectGameMode") )..{
     OnCommand=function(self)
         self:CenterX():y(_screen.cy-180):shadowlength(3)
@@ -197,6 +191,15 @@ t[#t+1] = Def.Quad{
     OnCommand=function(self)
         self:xy( _screen.cx,_screen.cy-40 ):zoomto(SCREEN_WIDTH,160):diffuse( 0,0,0,0.4 )
     end;
+};
+
+t[#t+1] = Def.BitmapText{
+    Font="Arial Bold";
+    Text="Use &LEFT; &RIGHT; to select, then press NEXT";
+    OnCommand=function(self)
+        self:xy(_screen.cx,_screen.cy+200):zoom(0.66)
+        :shadowlength(3):diffuseblink()
+    end
 };
 
 t[#t+1] = MainMenuChoices()
