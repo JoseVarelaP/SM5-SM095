@@ -24,7 +24,7 @@ t.OnCommand=function(self)
             WheelTable[i]:GetChild(sec):zoom(0)
         end
     end
-    --SCREENMAN:GetTopScreen():GetChild("MenuTimer"):visible(false)
+    SCREENMAN:GetTopScreen():GetChild("Timer"):visible(false)
     --DiffListRow:Center()
 end
 
@@ -39,12 +39,8 @@ local function ReloadWheelTween()
     :linear(0.3):y(SCREEN_CENTER_Y+109 )
 end
 
-t.NextGroupMessageCommand=function(self)
-    ReloadWheelTween()
-end;
-t.PreviousGroupMessageCommand=function(self)
-    ReloadWheelTween()
-end;
+t.NextGroupMessageCommand=function(self) ReloadWheelTween() end;
+t.PreviousGroupMessageCommand=function(self) ReloadWheelTween() end;
 
 t.SongUnchosenMessageCommand=function(self)
     local MWheel = SCREENMAN:GetTopScreen():GetChild("MusicWheel");
