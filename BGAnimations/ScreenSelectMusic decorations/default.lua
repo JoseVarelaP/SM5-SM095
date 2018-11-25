@@ -126,19 +126,6 @@ t[#t+1] = Def.ActorFrame{
 		StartSelectingStepsMessageCommand=cmd(sleep,0.5;diffusealpha,1);
 		SongUnchosenMessageCommand=cmd(stoptweening;diffusealpha,0);
 	};
-
-	LoadFont("ABlO")..{
-		OnCommand=function(self)
-			self:xy( SCREEN_CENTER_X,SCREEN_CENTER_Y-20 ):zoom(0.8):shadowlength(3)
-		end;
-		CurrentSongChangedMessageCommand=function(self)
-			local song = GAMESTATE:GetCurrentSong();
-			self:settext("")
-			if song then
-				self:settext( song:GetDisplayMainTitle() )
-			end
-		end;
-	};
 };
 
 t[#t+1] = Def.StepsDisplayList{

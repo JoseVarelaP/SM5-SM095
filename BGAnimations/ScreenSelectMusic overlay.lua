@@ -9,7 +9,7 @@ t.OnCommand=function(self)
     SCREENMAN:GetTopScreen():GetChild("Banner"):visible(false)
 
     local MWheel = SCREENMAN:GetTopScreen():GetChild("MusicWheel");
-    MWheel:xy( SCREEN_CENTER_X, SCREEN_CENTER_Y+109 )
+    MWheel:xy( SCREEN_CENTER_X, SCREEN_CENTER_Y+109 ):draworder(1)
     -- alright we got items
     local WheelTable = MWheel:GetChild("MusicWheelItem")
     local NItems = THEME:GetMetric("MusicWheel","NumWheelItems")+2
@@ -44,5 +44,18 @@ t.SongUnchosenMessageCommand=function(self)
     local MWheel = SCREENMAN:GetTopScreen():GetChild("MusicWheel");
     MWheel:stoptweening():linear(0.3):y( SCREEN_CENTER_Y+109 )
 end;
+
+t[#t+1] = LoadFont("ABlO")..{
+    OnCommand=function(self)
+        self:xy( SCREEN_CENTER_X,SCREEN_CENTER_Y-20 ):zoom(0.8):shadowlength(3)
+    end;
+    CurrentSongChangedMessageCommand=function(self)
+        local song = GAMESTATE:GetCurrentSong();
+        self:settext("")
+        if song then
+            self:settext( song:GetDisplayMainTitle() )
+        end
+    end;
+};
 
 return t;
