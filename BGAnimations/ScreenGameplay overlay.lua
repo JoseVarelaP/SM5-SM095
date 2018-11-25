@@ -1,4 +1,4 @@
-local t = Def.ActorFrame{};
+local total = Def.ActorFrame{};
 
 local pos = {
     -- P1 position
@@ -7,7 +7,9 @@ local pos = {
     math.floor( scale(2.25/3,0,1,SCREEN_LEFT,SCREEN_RIGHT) )
 };
 
-t.OnCommand=function(self)
+local ModestoCenter = { "solo", "doubles" };
+
+total.OnCommand=function(self)
     --[[
         SM handles the background brightness by 3 quads, 2 by the sides and one in the middle.
         let's grab all of them and slowly fade them back to normal when "Here We Go" begins.
@@ -25,18 +27,30 @@ end;
 for player in ivalues(PlayerNumber) do
     local pla = pname(player)
     local posset = pos[ tonumber( string.sub(pla, -1) ) ]
-    t[#t+1] = Def.ActorFrame{
+    local t = Def.ActorFrame{
         OnCommand=function(self)
-            self:xy( posset, _screen.cy+200 ):player(player)
+            self:x( posset ):player(player)
             if GAMESTATE:IsPlayerEnabled(player) then
                 SCREENMAN:GetTopScreen():GetChild("Player"..pla):x( posset )
                 -- check Player Judgment for info
                 SCREENMAN:GetTopScreen():GetChild("Player"..pla):GetChild("Combo"):visible(false)
                 SCREENMAN:GetTopScreen():GetChild("Life"..pla):visible(false)
                 SCREENMAN:GetTopScreen():GetChild("Score"..pla):visible(false)
+                for mode in ivalues(ModestoCenter) do
+                    print( GAMESTATE:GetCurrentStyle():GetName() )
+                    if GAMESTATE:GetCurrentStyle():GetName() == mode then
+                        SCREENMAN:GetTopScreen():GetChild("Player"..pla):CenterX()
+                        self:CenterX()
+                    end
+                end
             end
         end;
-
+    };
+    t[#t+1] = Def.ActorFrame{
+        Name="PlayerBasedAC"..player;
+        OnCommand=function(self)
+            self:y( _screen.cy+200 )
+        end;
         -- Score information.
         -- Number fade occurs is because the frame is on top
         Def.BitmapText{
@@ -53,7 +67,7 @@ for player in ivalues(PlayerNumber) do
 
     local LifeFrame = Def.ActorFrame{
         OnCommand=function(self)
-            self:xy( posset, _screen.cy-210 ):player(player)
+            self:y( _screen.cy-210 ):player(player)
         end;
     };
 
@@ -102,6 +116,7 @@ for player in ivalues(PlayerNumber) do
     end
 
     t[#t+1] = LifeFrame;
+    total[#total+1] = t;
 end
 
-return t;
+return total;
