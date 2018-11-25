@@ -38,3 +38,9 @@ function TickSet(self,param)
         self:diffuse(CustomDifficultyToColor(param.CustomDifficulty));
     end
 end
+
+GameColor.Difficulty.Beginner = color("#fee600");
+GameColor.Difficulty.Easy = color("#ff2f39");
+GameColor.Difficulty.Medium = color("#ff2f39");
+GameColor.Difficulty.Hard = color("#2cff00");
+GameColor.Difficulty.Challenge = color("#2cff00");
