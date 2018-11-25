@@ -1,5 +1,11 @@
 local t = Def.ActorFrame{};
 
+t[#t+1] = Def.Quad{
+    OnCommand=function(self)
+        self:FullScreen():diffuse(Color.Black)
+    end;
+};
+
 t[#t+1] = Def.Sprite{
     Texture=THEME:GetPathG("","Warning/caution");
     OnCommand=function(self)

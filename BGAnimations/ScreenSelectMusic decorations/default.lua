@@ -47,10 +47,10 @@ t[#t+1] = Def.ActorFrame{
 	Def.Quad{
 		OnCommand=cmd(x,SCREEN_CENTER_X;y,SCREEN_CENTER_Y+106;zoomto,SCREEN_WIDTH,198;diffusecolor,Color.Black;draworder,1;diffusealpha,0.3);
 	};
-	LoadActor("frame")..{
+	LoadActor( THEME:GetPathG("Select","Song/frame") )..{
 		OnCommand=cmd(x,SCREEN_CENTER_X;y,SCREEN_CENTER_Y-120;zoomtowidth,SCREEN_WIDTH);
 	};
-	LoadActor("difftab")..{
+	LoadActor( THEME:GetPathG("Select","Song/difftab") )..{
 		OnCommand=cmd(x,SCREEN_CENTER_X;y,SCREEN_CENTER_Y-50);
 	};
 	DrawDifList(PLAYER_1,'Difficulty_Easy')..{
@@ -62,10 +62,10 @@ t[#t+1] = Def.ActorFrame{
 	DrawDifList(PLAYER_1,'Difficulty_Hard')..{
 		OnCommand=cmd(halign,0;addx,48;);
 	};
-	LoadActor("cursor")..{
+	LoadActor( THEME:GetPathG("Select","Song/cursor") )..{
 		OnCommand=cmd(x,SCREEN_CENTER_X-245;y,SCREEN_CENTER_Y-140;zoomy,.5);
 	};
-	LoadActor("cursor")..{
+	LoadActor( THEME:GetPathG("Select","Song/cursor") )..{
 		OnCommand=cmd(x,SCREEN_CENTER_X+245;y,SCREEN_CENTER_Y-140;zoomy,.5;zoomx,-1);
 	};
 	LoadActor("Banner")..{
@@ -80,7 +80,7 @@ t[#t+1] = Def.ActorFrame{
 		CurrentSongChangedMessageCommand=cmd(playcommand,"Set");
 		CurrentCourseChangedMessageCommand=cmd(playcommand,"Set");
 	};
-	LoadActor("_bpm label") .. {
+	LoadActor( THEME:GetPathG("Select","Song/_bpm label") ) .. {
 		InitCommand=cmd(x,SCREEN_CENTER_X+267;y,SCREEN_CENTER_Y-77);
 		OffCommand=cmd(diffusealpha,0);
 		CurrentSongChangedMessageCommand=function(self)
@@ -116,12 +116,12 @@ t[#t+1] = Def.ActorFrame{
 		end;
 		SortOrderChangedMessageCommand=cmd(playcommand,"Set");
 	};
-	LoadActor("header")..{
+	LoadActor( THEME:GetPathG("","Header/SelectSong") )..{
 		OnCommand=cmd(x,SCREEN_CENTER_X;y,SCREEN_CENTER_Y-190;shadowlength,4);
 		StartSelectingStepsMessageCommand=cmd(linear,0.5;diffusealpha,0);
 		SongUnchosenMessageCommand=cmd(stoptweening;linear,0.5;diffusealpha,1);
 	};
-	LoadActor("steps")..{
+	LoadActor( THEME:GetPathG("","Header/SelectSteps") )..{
 		OnCommand=cmd(x,SCREEN_CENTER_X;y,SCREEN_CENTER_Y-190;shadowlength,4;diffusealpha,0);
 		StartSelectingStepsMessageCommand=cmd(sleep,0.5;diffusealpha,1);
 		SongUnchosenMessageCommand=cmd(stoptweening;diffusealpha,0);
@@ -139,6 +139,24 @@ t[#t+1] = Def.ActorFrame{
 			end
 		end;
 	};
+};
+
+t[#t+1] = Def.StepsDisplayList{
+	Name="StepsDisplayList";
+	OnCommand=function(self)
+		self:zoom(1):xy( SCREEN_CENTER_X,SCREEN_CENTER_Y+30 ):diffusealpha(0)
+	end;
+	StartSelectingStepsMessageCommand=function(self)
+		self:stoptweening():sleep(0.5):diffusealpha(1)
+	end;
+	SongUnchosenMessageCommand=function(self)
+		self:stoptweening():diffusealpha(0)
+	end;
+
+	CursorP1=Def.ActorFrame{};
+	CursorP1Frame=Def.ActorFrame{ Name='CursorP1Frame'; };
+	CursorP2=Def.ActorFrame{};
+	CursorP2Frame=Def.ActorFrame { Name='CursorP2Frame'; };
 };
 
 t[#t+1] = Def.BitmapText{

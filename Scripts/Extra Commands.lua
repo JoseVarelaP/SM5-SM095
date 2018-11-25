@@ -32,3 +32,9 @@ function Actor:GetWheelTrans(offsetFromCenter,itemIndex,numItems)
     
     return self,offsetFromCenter,itemIndex,numItems
 end
+
+function TickSet(self,param)
+    if param.Steps then
+        self:diffuse(CustomDifficultyToColor(param.CustomDifficulty));
+    end
+end

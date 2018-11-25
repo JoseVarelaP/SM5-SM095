@@ -11,7 +11,6 @@ t.OnCommand=function(self)
     local MWheel = SCREENMAN:GetTopScreen():GetChild("MusicWheel");
     MWheel:xy( SCREEN_CENTER_X, SCREEN_CENTER_Y+109 )
     -- alright we got items
-    --local DiffListRow = SCREENMAN:GetTopScreen():GetChild(""):GetChild(""):GetChild("StepsDisplayListRow")
     local WheelTable = MWheel:GetChild("MusicWheelItem")
     local NItems = THEME:GetMetric("MusicWheel","NumWheelItems")+2
 
@@ -25,7 +24,6 @@ t.OnCommand=function(self)
         end
     end
     SCREENMAN:GetTopScreen():GetChild("Timer"):visible(false)
-    --DiffListRow:Center()
 end
 
 t.StartSelectingStepsMessageCommand=function(self)
