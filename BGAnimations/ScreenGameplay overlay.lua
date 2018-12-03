@@ -1,13 +1,11 @@
 local total = Def.ActorFrame{};
-
+local ModestoCenter = { "solo", "double" };
 local pos = {
     -- P1 position
     math.floor( scale(0.80/3,0,1,SCREEN_LEFT,SCREEN_RIGHT) ),
     -- P2 position
     math.floor( scale(2.25/3,0,1,SCREEN_LEFT,SCREEN_RIGHT) )
 };
-
-local ModestoCenter = { "solo", "doubles" };
 
 total.OnCommand=function(self)
     --[[
@@ -46,10 +44,7 @@ for player in ivalues(PlayerNumber) do
         end;
     };
     t[#t+1] = Def.ActorFrame{
-        Name="PlayerBasedAC"..player;
-        OnCommand=function(self)
-            self:y( _screen.cy+200 )
-        end;
+        OnCommand=function(self) self:y( _screen.cy+200 ) end;
         -- Score information.
         -- Number fade occurs is because the frame is on top
         Def.BitmapText{
@@ -65,9 +60,7 @@ for player in ivalues(PlayerNumber) do
     };
 
     local LifeFrame = Def.ActorFrame{
-        OnCommand=function(self)
-            self:y( _screen.cy-210 ):player(player)
-        end;
+        OnCommand=function(self) self:y( _screen.cy-210 ) end;
     };
 
     LifeFrame[#LifeFrame+1] = LoadActor( THEME:GetPathG("Gameplay/Life Meter","Frame") )..{
@@ -88,19 +81,15 @@ for player in ivalues(PlayerNumber) do
             InitCommand=function(self) self:Pix():pause():setstate(i-1) end;
             OnCommand=function(self)
                 self:xy( -108+(12*i),0 ):shadowlength(6)
-                self:sleep(i / 20)
-                self:queuecommand("Anim")
+                :sleep(i / 20)
+                :queuecommand("Anim")
             end;
             AnimCommand=function(self)
-                --self:hurrytweening(0.05)
-
                 self:sleep( ( (GAMESTATE:GetSongBPS()/4) /GAMESTATE:GetSongBPS()) )
-                self:decelerate(0.2/GAMESTATE:GetSongBPS())
-                self:addy(-8)
-                self:sleep(0.066/GAMESTATE:GetSongBPS())
-                self:accelerate(0.2/GAMESTATE:GetSongBPS())
-                self:addy(8)
-                self:queuecommand("Anim")
+                :decelerate(0.2/GAMESTATE:GetSongBPS())
+                :addy(-8):sleep(0.066/GAMESTATE:GetSongBPS())
+                :accelerate(0.2/GAMESTATE:GetSongBPS())
+                :addy(8):queuecommand("Anim")
             end;
             LifeChangedMessageCommand=function(self,params)
 				if (params.Player == player) then
@@ -116,6 +105,42 @@ for player in ivalues(PlayerNumber) do
 
     t[#t+1] = LifeFrame;
     total[#total+1] = t;
+end
+
+for i=1,12,2 do
+    total[#total+1] = Def.ActorFrame{
+        OnCommand=function(self)
+            self:x(20*i):y(-20+40*i)
+            self:addx(-SCREEN_WIDTH):linear(1):addx(SCREEN_WIDTH*2.5)
+        end;
+
+        Def.Quad{
+            OnCommand=function(self)
+                self:zoomto(SCREEN_WIDTH*2.2,40):halign(0):diffuse(Color.Black)
+            end;
+        };
+        LoadActor( THEME:GetPathG("Transition/Star","Blue") );
+    };
+end
+
+for i=1,12,2 do
+    total[#total+1] = Def.ActorFrame{
+        OnCommand=function(self)
+            self:x(20*i):y(20+40*i)
+            self:addx(SCREEN_WIDTH*1.8):linear(1):addx(-SCREEN_WIDTH*2.5)
+        end;
+
+        Def.Quad{
+            OnCommand=function(self)
+                self:zoomto(SCREEN_WIDTH*2.2,40):halign(1):diffuse(Color.Black)
+            end;
+        };
+        LoadActor( THEME:GetPathG("Transition/Star","Blue") )..{
+            OnCommand=function(self)
+                self:zoomx(-1)
+            end
+        };
+    };
 end
 
 return total;
