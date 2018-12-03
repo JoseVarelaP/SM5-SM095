@@ -7,13 +7,13 @@ t[#t+1] = LoadActor( THEME:GetPathG("","Header/Results") )..{
 };
 
 local JudgmentInfo = {
-    Types = { 'W1', 'W2', 'W3', 'W4', 'W5', 'Miss' },
+    Types = { 'W1', 'W2', 'W3', 'W4', 'W5', 'Miss', 'combo' },
 };
 local yspacing = 32;
 local offsetspritepos = false;
 
 if PREFSMAN:GetPreference("AllowW1") == "AllowW1_Never" then
-    JudgmentInfo.Types = { 'W2', 'W3', 'W4', 'W5', 'Miss' };
+    JudgmentInfo.Types = { 'W2', 'W3', 'W4', 'W5', 'Miss', 'combo' };
     yspacing = 36;
     offsetspritepos = true;
 end
@@ -22,6 +22,17 @@ local ScoreInfo = Def.ActorFrame{};
 
 
 for player in ivalues(PlayerNumber) do
+    local Combo = STATSMAN:GetCurStageStats():GetPlayerStageStats(player):MaxCombo();
+    local grade = ToEnumShortString( STATSMAN:GetCurStageStats():GetPlayerStageStats(player):GetGrade() );
+    t[#t+1] = LoadActor( THEME:GetPathG("","Grades/"..grade) )..{
+        OnCommand=function(self)
+            self:xy( _screen.cx+160*GAMESTATE:Side(player), _screen.cy-120 )
+            self:zoom(0.8)
+            if offsetspritepos then
+                self:zoom(1)
+            end
+        end;
+    };
     for index,sco in ipairs(JudgmentInfo.Types) do
         t[#t+1] = Def.ActorFrame{
             OnCommand=function(self)
@@ -30,8 +41,13 @@ for player in ivalues(PlayerNumber) do
             Def.BitmapText{
                 Font="Bold Numbers";
                 OnCommand=function(self)
-                    local sco = STATSMAN:GetCurStageStats():GetPlayerStageStats(player):GetTapNoteScores("TapNoteScore_"..sco)
-                    self:settext(("% 4.0f"):format( sco ))
+                    local scor;
+                    if sco == "combo" then
+                        scor = Combo
+                    else
+                        scor = STATSMAN:GetCurStageStats():GetPlayerStageStats(player):GetTapNoteScores("TapNoteScore_"..sco)
+                    end
+                    self:settext(("% 4.0f"):format( scor ))
                     :shadowlength(3):zoom(0.8)
 
                     if not GAMESTATE:IsPlayerEnabled(player) then
@@ -46,8 +62,13 @@ for player in ivalues(PlayerNumber) do
             Def.BitmapText{
                 Font="Arial Bold";
                 OnCommand=function(self)
-                    local sco = STATSMAN:GetCurStageStats():GetPlayerStageStats(player):GetPercentageOfTaps("TapNoteScore_"..sco)
-                    self:settext( FormatPercentScore(sco) )
+                    local scor, percentage = 0,0;
+                    if sco == "combo" then
+                        scor = 0
+                    else
+                        scor = STATSMAN:GetCurStageStats():GetPlayerStageStats(player):GetPercentageOfTaps("TapNoteScore_"..sco)
+                    end
+                    self:settext( FormatPercentScore( scor ) )
                     :shadowlength(3):zoom(0.5)
 
                     if not GAMESTATE:IsPlayerEnabled(player) then
@@ -77,8 +98,12 @@ for player in ivalues(PlayerNumber) do
 end
 
 for index,sco in ipairs(JudgmentInfo.Types) do
+    local GhTy = THEME:GetPathG("Player judgment/Judgment","label")
+    if sco == "combo" then
+        GhTy = THEME:GetPathG("","Gameplay/max");
+    end 
     t[#t+1] = Def.Sprite{
-        Texture=THEME:GetPathG("Player judgment/Judgment","label");
+        Texture=GhTy;
         OnCommand=function(self)
             local function spritedelay(val)
                 if val then
@@ -88,10 +113,24 @@ for index,sco in ipairs(JudgmentInfo.Types) do
                     return val-1
                 end
             end
-            self:pause():setstate( spritedelay(index) ):zoom(0.8):shadowlength(3)
+            self:pause()
+            if sco ~= "combo" then
+                self:setstate( spritedelay(index) )
+            end
+            self:zoom(0.8):shadowlength(3)
             self:xy( _screen.cx, _screen.cy-108+(yspacing*index) )
         end;
     };
 end
+
+t[#t+1] = Def.BitmapText{
+    Font="Arial Bold";
+    Text="Press NEXT";
+    OnCommand=function(self)
+        self:xy(_screen.cx,_screen.cy+200):zoom(0.6)
+        :shadowlength(3):diffuseblink()
+        SCREENMAN:GetTopScreen():GetChild("Timer"):visible(false)
+    end
+};
 
 return t;
