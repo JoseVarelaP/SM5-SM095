@@ -4,34 +4,8 @@ local MenuIndex = 1;
 
 local GoToWarn = function() SCREENMAN:NScreen("SM_Caution") end;
 
-local MenuChoices = {
-    {
-        function()
-            GAMESTATE:SetCurrentStyle("single")
-            GoToWarn()
-        end,
-    },
-    {
-        function()
-            GAMESTATE:SetCurrentStyle("solo")
-            GoToWarn()
-        end,
-    },
-    {
-        function()
-            GAMESTATE:JoinPlayer(PLAYER_1)
-            GAMESTATE:JoinPlayer(PLAYER_2)
-            GAMESTATE:SetCurrentStyle("versus")
-            GoToWarn()
-        end,
-    },
-    {
-        function()
-            GAMESTATE:SetCurrentStyle("double")
-            GoToWarn()
-        end,
-    },
-};
+local modes = { "single", "solo", "versus", "double" };
+local MenuChoices = { 1,2,3,4 };
 
 local PadChoices = {
     Def.ActorFrame{
@@ -116,7 +90,12 @@ local BTInput = {
         CheckValueOffsets()
     end,
     ["Start"] = function(event)
-        MenuChoices[MenuIndex][1](event)
+        if MenuIndex == 3 then
+            GAMESTATE:JoinPlayer(PLAYER_1)
+            GAMESTATE:JoinPlayer(PLAYER_2)
+        end
+        GAMESTATE:SetCurrentStyle( modes[MenuIndex] )
+        GoToWarn()
     end,
     ["Back"] = function(event)
         SCREENMAN:PlayCancelSound()

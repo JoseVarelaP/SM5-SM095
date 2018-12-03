@@ -51,10 +51,7 @@ t[#t+1] = LoadFont("ABlO")..{
     end;
     CurrentSongChangedMessageCommand=function(self)
         local song = GAMESTATE:GetCurrentSong();
-        self:settext("")
-        if song then
-            self:settext( song:GetDisplayMainTitle() )
-        end
+        self:settext( song and song:GetDisplayMainTitle() or "" )
     end;
 };
 

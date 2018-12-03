@@ -37,7 +37,6 @@ for player in ivalues(PlayerNumber) do
                 SCREENMAN:GetTopScreen():GetChild("Life"..pla):visible(false)
                 SCREENMAN:GetTopScreen():GetChild("Score"..pla):visible(false)
                 for mode in ivalues(ModestoCenter) do
-                    print( GAMESTATE:GetCurrentStyle():GetName() )
                     if GAMESTATE:GetCurrentStyle():GetName() == mode then
                         SCREENMAN:GetTopScreen():GetChild("Player"..pla):CenterX()
                         self:CenterX()

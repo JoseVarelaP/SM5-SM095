@@ -113,9 +113,7 @@ t[#t+1] = LoadActor( THEME:GetPathV("","title screen bg") )..{
 };
 
 t[#t+1] = LoadActor( THEME:GetPathG("","Logo/Logo.png") )..{
-    OnCommand=function(self)
-        self:CenterX():y(_screen.cy-130)
-    end
+    OnCommand=function(self) self:CenterX():y(_screen.cy-130) end;
 };
 
 t[#t+1] = LoadActor( THEME:GetPathG("","Logo/Max.png") )..{
