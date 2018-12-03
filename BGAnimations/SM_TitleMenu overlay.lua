@@ -141,6 +141,8 @@ t[#t+1] = Def.BitmapText{
     end
 };
 
+ANNOUNCER:PlayComment("title menu game name")
+
 t[#t+1] = MainMenuChoices()
 t[#t+1] = Controller;
 
