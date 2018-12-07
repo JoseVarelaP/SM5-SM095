@@ -81,25 +81,16 @@ for player in ivalues(PlayerNumber) do
             InitCommand=function(self) self:Pix():pause():setstate(i-1) end;
             OnCommand=function(self)
                 self:xy( -108+(12*i),0 ):shadowlength(6)
-                :sleep(i / 20)
-                :queuecommand("Anim")
-            end;
-            AnimCommand=function(self)
-                self:sleep( ( (GAMESTATE:GetSongBPS()/4) /GAMESTATE:GetSongBPS()) )
-                :decelerate(0.2/GAMESTATE:GetSongBPS())
-                :addy(-8):sleep(0.066/GAMESTATE:GetSongBPS())
-                :accelerate(0.2/GAMESTATE:GetSongBPS())
-                :addy(8):queuecommand("Anim")
+                :bounce():effectmagnitude(0,-10,0):effectclock('beat'):effectoffset(i/17)
             end;
             LifeChangedMessageCommand=function(self,params)
-				if (params.Player == player) then
-					local life = string.format("%.1f",params.LifeMeter:GetLife() * 10)
-					local pills = (string.format("%.1f",life * 2.9 / 17)) * 10
+                if (params.Player == player) then
+                    local life = string.format("%.1f",params.LifeMeter:GetLife() * 10)
+                    local pills = (string.format("%.1f",life * 2.9 / 17)) * 10
                     self:setstate(-1 + i)
                     :visible( pills >= i and true or false )
-                    :stopeffect()
-				end;
-			end;
+                end;
+            end;
         };
     end
 
