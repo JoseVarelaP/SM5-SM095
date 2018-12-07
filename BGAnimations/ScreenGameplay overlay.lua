@@ -82,13 +82,14 @@ for player in ivalues(PlayerNumber) do
             OnCommand=function(self)
                 self:xy( -108+(12*i),0 ):shadowlength(6)
                 :bounce():effectmagnitude(0,-10,0):effectclock('beat'):effectoffset(i/17)
+                :effecttiming( 0.15, 0, 0.15, 0.2, 0.5 )
             end;
             LifeChangedMessageCommand=function(self,params)
                 if (params.Player == player) then
                     local life = string.format("%.1f",params.LifeMeter:GetLife() * 10)
                     local pills = (string.format("%.1f",life * 2.9 / 17)) * 10
                     self:setstate(-1 + i)
-                    :visible( pills >= i and true or false )
+                    --:visible( pills >= i and true or false )
                 end;
             end;
         };
