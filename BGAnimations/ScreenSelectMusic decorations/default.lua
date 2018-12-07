@@ -75,7 +75,7 @@ t[#t+1] = Def.ActorFrame{
 		OffCommand=cmd(diffusealpha,0);
 		CurrentSongChangedMessageCommand=function(self)
 			local song = GAMESTATE:GetCurrentSong()
-			self:stoptweening():linear(0.5)
+			self:stoptweening():linear(0.5):diffuse(Color.White)
 			if song:HasSignificantBPMChangesOrStops() and not song:IsDisplayBpmConstant() then
 				self:diffusetopedge( color("#fb0000") )
 				:diffusebottomedge( color("#9d0000") )
