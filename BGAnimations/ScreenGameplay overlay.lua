@@ -89,7 +89,7 @@ for player in ivalues(PlayerNumber) do
                     local life = string.format("%.1f",params.LifeMeter:GetLife() * 10)
                     local pills = (string.format("%.1f",life * 2.9 / 17)) * 10
                     self:setstate(-1 + i)
-                    --:visible( pills >= i and true or false )
+                    :visible( pills >= i and true or false )
                 end;
             end;
         };

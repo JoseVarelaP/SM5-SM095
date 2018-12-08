@@ -20,17 +20,14 @@ local function DrawDifList(pn,diff)
 			SetCommand=function(self)
 			local st=GAMESTATE:GetCurrentStyle():GetStepsType();
 			local song=GAMESTATE:GetCurrentSong();
-			local course = GAMESTATE:GetCurrentCourse();
+			local course=GAMESTATE:GetCurrentCourse();
+			self:settext("");
 				if song then
 					GetDifListX(self,pn,110,0);
 					if song:HasStepsTypeAndDifficulty(st,diff) then
 					local steps = song:GetOneSteps( st, diff );
 						self:settext(steps:GetMeter());
-					else
-						self:settext("");
 					end;
-				else
-					self:settext("");
 				end;
 			end;
 		CurrentSongChangedMessageCommand=cmd(playcommand,"Set");

@@ -1,7 +1,6 @@
 local t = Def.ActorFrame{};
 
 local Items = {
-    ["Sections"] = { "SectionExpanded","SectionCollapsed" },
     ["Hide"] = { "SectionCount","SongName" },
 };
 
@@ -16,9 +15,6 @@ t.OnCommand=function(self)
 
     for i=1,NItems do
         WheelTable[i]:GetChild("SongNormalPart"):GetChild("Banner"):shadowlengthx(7)
-        for sec in ivalues(Items.Sections) do
-            WheelTable[i]:GetChild(sec):strokecolor(Color.Black):maxwidth(250)
-        end
         for sec in ivalues(Items.Hide) do
             WheelTable[i]:GetChild(sec):zoom(0)
         end

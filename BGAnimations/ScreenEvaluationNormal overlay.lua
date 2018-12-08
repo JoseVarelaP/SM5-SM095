@@ -20,14 +20,13 @@ end
 
 local ScoreInfo = Def.ActorFrame{};
 
-
 for player in ivalues(PlayerNumber) do
     local Combo = STATSMAN:GetCurStageStats():GetPlayerStageStats(player):MaxCombo();
     local grade = ToEnumShortString( STATSMAN:GetCurStageStats():GetPlayerStageStats(player):GetGrade() );
     t[#t+1] = LoadActor( THEME:GetPathG("","Grades/"..grade) )..{
         OnCommand=function(self)
             self:xy( _screen.cx+160*GAMESTATE:Side(player), _screen.cy-120 )
-            self:zoom(0.8)
+            :zoom(0.8):player(player)
             if offsetspritepos then
                 self:zoom(1)
             end

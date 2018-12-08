@@ -8,6 +8,7 @@ local t = Def.ActorFrame {
 	SetCommand=function(self)
 		local song = GAMESTATE:GetCurrentSong();
 		local Path = THEME:GetPathG("Common","fallback banner");
+		c.SBanner:diffusealpha(0);
 		if song then
 			Path = song:GetBannerPath();
 			if not Path then
@@ -15,8 +16,6 @@ local t = Def.ActorFrame {
 			end
 			c.SBanner:LoadBanner(Path);
 			c.SBanner:diffusealpha(1);
-		else
-			c.SBanner:diffusealpha(0);
 		end;
 		c.SBanner:setsize(320,120);
 	end;
