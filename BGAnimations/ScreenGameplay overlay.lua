@@ -81,7 +81,7 @@ for player in ivalues(PlayerNumber) do
             InitCommand=function(self) self:Pix():pause():setstate(i-1) end;
             OnCommand=function(self)
                 self:xy( -108+(12*i),0 ):shadowlength(6)
-                :bounce():effectmagnitude(0,-10,0):effectclock('beat'):effectoffset(i/17)
+                :bounce():effectmagnitude(0,-10,0):effectclock('beat'):effectoffset(-i/17)
                 :effecttiming( 0.15, 0, 0.15, 0.2, 0.5 )
             end;
             LifeChangedMessageCommand=function(self,params)

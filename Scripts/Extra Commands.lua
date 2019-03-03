@@ -60,7 +60,7 @@ function AnnouncerManager:PlayComment(FolderLocation)
             end
             -- Does the folder contain more than 1 audio file?
             if #announc > 1 then
-                auplay = math.random(1,#announc)
+                auplay = math.random(#announc)
             end
             -- Play the audio
             SOUND:PlayOnce( "Announcers/"..cur_anounc.."/".. FolderLocation .."/"..announc[auplay] )

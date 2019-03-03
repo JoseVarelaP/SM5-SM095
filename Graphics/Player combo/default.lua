@@ -1,14 +1,15 @@
 local c;
 local player = Var "Player";
-local ShowComboAt = 5;
+local ShowComboAt = 4;
 
 local Pulse = function(self, param)
 	self:zoom(param.Zoom)
+	self:x( -40 - (param.Zoom-1)*30 )
 end;
 
 local NumberMinZoom = 0.5
 local NumberMaxZoom = 1
-local NumberMaxZoomAt = 1000
+local NumberMaxZoomAt = 800
 
 local t = Def.ActorFrame {
 	InitCommand=cmd(vertalign,bottom);
@@ -16,7 +17,7 @@ local t = Def.ActorFrame {
 	LoadFont( "Combo", "numbers" ) .. {
 		Name="Number";
 		OnCommand=function(self)
-			self:xy(0,-15):align(1,1):shadowlength(4)
+			self:xy(-30,-20):align(0.5,1):shadowlength(4)
 		end;
 	};
 	LoadActor("label") .. {
