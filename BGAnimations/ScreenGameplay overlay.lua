@@ -1,10 +1,8 @@
 local total = Def.ActorFrame{};
 local ModestoCenter = { "solo", "double" };
 local pos = {
-    -- P1 position
-    math.floor( scale(0.80/3,0,1,SCREEN_LEFT,SCREEN_RIGHT) ),
-    -- P2 position
-    math.floor( scale(2.25/3,0,1,SCREEN_LEFT,SCREEN_RIGHT) )
+    math.floor( scale(0.80/3,0,1,SCREEN_LEFT,SCREEN_RIGHT) ), -- P1 position
+    math.floor( scale(2.25/3,0,1,SCREEN_LEFT,SCREEN_RIGHT) ) -- P2 position
 };
 
 total.OnCommand=function(self)
@@ -29,14 +27,14 @@ for player in ivalues(PlayerNumber) do
         OnCommand=function(self)
             self:x( posset ):player(player)
             if GAMESTATE:IsPlayerEnabled(player) then
-                SCREENMAN:GetTopScreen():GetChild("Player"..pla):x( posset )
-                -- check Player Judgment for info
-                SCREENMAN:GetTopScreen():GetChild("Player"..pla):GetChild("Combo"):visible(false)
-                SCREENMAN:GetTopScreen():GetChild("Life"..pla):visible(false)
-                SCREENMAN:GetTopScreen():GetChild("Score"..pla):visible(false)
+                local sc = SCREENMAN:GetTopScreen()
+                sc:GetChild("Player"..pla):x( posset )
+                sc:GetChild("Player"..pla):GetChild("Combo"):visible(false):zoom(0)
+                sc:GetChild("Life"..pla):visible(false)
+                sc:GetChild("Score"..pla):visible(false)
                 for mode in ivalues(ModestoCenter) do
                     if GAMESTATE:GetCurrentStyle():GetName() == mode then
-                        SCREENMAN:GetTopScreen():GetChild("Player"..pla):CenterX()
+                        sc:GetChild("Player"..pla):CenterX()
                         self:CenterX()
                     end
                 end
@@ -113,9 +111,6 @@ for i=1,12,2 do
         };
         LoadActor( THEME:GetPathG("Transition/Star","Blue") );
     };
-end
-
-for i=1,12,2 do
     total[#total+1] = Def.ActorFrame{
         OnCommand=function(self)
             self:x(20*i):y(20+40*i)

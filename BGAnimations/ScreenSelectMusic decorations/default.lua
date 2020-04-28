@@ -1,64 +1,47 @@
-local t = Def.ActorFrame {};
+local t = Def.ActorFrame {}
 
-local function GetDifListX(self,pn,offset,fade)
-	if pn==PLAYER_1 then
-		self:x(SCREEN_CENTER_X);
-		if fade>0 then
-			self:faderight(fade);
-		end;
-	end;
-	return r;
-end;
-
-local function DrawDifList(pn,diff)
+local function DrawDifList(diff)
 	local t=Def.ActorFrame {
-		InitCommand=function(self)
-			self:player(pn):y(SCREEN_CENTER_Y-52)
-		end;
-		LoadFont("Arial Bold")..{
-			InitCommand=function(self) self:zoom(0.6):shadowlength(3) end;
-			SetCommand=function(self)
-			local st=GAMESTATE:GetCurrentStyle():GetStepsType();
-			local song=GAMESTATE:GetCurrentSong();
-			local course=GAMESTATE:GetCurrentCourse();
-			self:settext("");
+		InitCommand=function(s) s:y(SCREEN_CENTER_Y-52) end,
+		CurrentSongChangedMessageCommand=function(s) s:playcommand("Set") end,
+		Def.BitmapText{
+			Font="Arial Bold",
+			InitCommand=function(s) s:zoom(0.6):shadowlength(3) end,
+			SetCommand=function(s)
+			local st=GAMESTATE:GetCurrentStyle():GetStepsType()
+			local song=GAMESTATE:GetCurrentSong()
+			s:settext(""):x(SCREEN_CENTER_X)
 				if song then
-					GetDifListX(self,pn,110,0);
-					if song:HasStepsTypeAndDifficulty(st,diff) then
-					local steps = song:GetOneSteps( st, diff );
-						self:settext(steps:GetMeter());
-					end;
-				end;
-			end;
-		CurrentSongChangedMessageCommand=cmd(playcommand,"Set");
-		CurrentStepsP1ChangedMessageCommand=cmd(playcommand,"Set");
-		CurrentStepsP2ChangedMessageCommand=cmd(playcommand,"Set");
-		CurrentTrailP1ChangedMessageCommand=cmd(playcommand,"Set");
-		CurrentTrailP2ChangedMessageCommand=cmd(playcommand,"Set");
-		CurrentCourseChangedMessageCommand=cmd(playcommand,"Set");
-		};
-	};
-	return t;
-end;
+					if song:HasStepsTypeAndDifficulty( st,diff) then
+						local steps = song:GetOneSteps( st, diff )
+						s:settext(steps:GetMeter())
+					end
+				end
+			end
+		}
+	}
+	return t
+end
 
 t[#t+1] = Def.ActorFrame{
 	Def.Quad{
-		OnCommand=cmd(x,SCREEN_CENTER_X;y,SCREEN_CENTER_Y+106;zoomto,SCREEN_WIDTH,198;diffusecolor,Color.Black;draworder,1;diffusealpha,0.3);
+		OnCommand=function(s) s:xy(SCREEN_CENTER_X,SCREEN_CENTER_Y+106):zoomto(SCREEN_WIDTH,198)
+			:diffusecolor(Color.Black):diffusealpha(0.3) end,
 	};
 	LoadActor( THEME:GetPathG("Select","Song/frame") )..{
-		OnCommand=cmd(x,SCREEN_CENTER_X;y,SCREEN_CENTER_Y-120;zoomtowidth,SCREEN_WIDTH);
+		OnCommand=function(s) s:xy(SCREEN_CENTER_X,SCREEN_CENTER_Y-120):zoomtowidth(SCREEN_WIDTH) end,
 	};
 	LoadActor( THEME:GetPathG("Select","Song/difftab") )..{
-		OnCommand=cmd(x,SCREEN_CENTER_X;y,SCREEN_CENTER_Y-50);
+		OnCommand=function(s) s:xy(SCREEN_CENTER_X,SCREEN_CENTER_Y-50) end,
 	};
 	LoadActor( THEME:GetPathG("Select","Song/cursor") )..{
-		OnCommand=cmd(x,SCREEN_CENTER_X-245;y,SCREEN_CENTER_Y-140;zoomy,.5);
+		OnCommand=function(s) s:xy(SCREEN_CENTER_X-245,SCREEN_CENTER_Y-140):zoomy(.5) end,
 	};
 	LoadActor( THEME:GetPathG("Select","Song/cursor") )..{
-		OnCommand=cmd(x,SCREEN_CENTER_X+245;y,SCREEN_CENTER_Y-140;zoomy,.5;zoomx,-1);
+		OnCommand=function(s) s:xy(SCREEN_CENTER_X+245,SCREEN_CENTER_Y-140):zoomy(.5):zoomx(-1) end,
 	};
 	LoadActor("Banner")..{
-		OnCommand=cmd(x,SCREEN_CENTER_X;y,SCREEN_CENTER_Y-120);
+		OnCommand=function(s) s:xy(SCREEN_CENTER_X,SCREEN_CENTER_Y-120) end,
 	};
 	Def.BPMDisplay {
 		File=THEME:GetPathF("BPMDisplay", "bpm");
@@ -120,7 +103,7 @@ local ListDraw = {
 };
 
 for val in ivalues(ListDraw) do
-	t[#t+1] = DrawDifList( GAMESTATE:GetMasterPlayerNumber(), val[2] )..{
+	t[#t+1] = DrawDifList( val[2] )..{
 		OnCommand=function(self)
 			self:addx(val[1]):addy(2)
 		end;

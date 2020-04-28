@@ -24,10 +24,8 @@ function GameState:Side(pn)
 end
 
 function Actor:GetWheelTrans(offsetFromCenter,itemIndex,numItems)
-    self:x(offsetFromCenter*92):y(0)
-    if itemIndex == 5 then
-        self:xy((offsetFromCenter*92)+60,-60)
-    end
+    self:x(offsetFromCenter*92+(itemIndex == 5 and math.cos( offsetFromCenter )*60 or 0))
+    :y( itemIndex == 5 and math.cos( offsetFromCenter )*-60 or 0 )
 	self:rotationz(-45):zoom(.7)
     
     return self,offsetFromCenter,itemIndex,numItems
@@ -41,41 +39,9 @@ function Actor:TickSet(param)
     return self,param
 end
 
--- Since most screens on this theme are not within the realms of announcer data...
--- [a.k.a are not from the hardcoded announcer screens]
--- let's make a function to bring it back!
-function AnnouncerManager:PlayComment(FolderLocation)
-    -- Do we have an announcer enabled?
-    if ANNOUNCER:GetCurrentAnnouncer() then
-        local cur_anounc = ANNOUNCER:GetCurrentAnnouncer()
-        -- Does the folder exist?
-        if FILEMAN:GetDirListing( "Announcers/"..cur_anounc.."/"..FolderLocation ) then
-            local announc = FILEMAN:GetDirListing( "Announcers/"..cur_anounc.."/"..FolderLocation.."/" )
-            local auplay = 1
-            -- MacOS check
-            for ind,val in ipairs(announc) do
-                if val == ".DS_Store" then
-                    table.remove( announc, ind )
-                end
-            end
-            -- Does the folder contain more than 1 audio file?
-            if #announc > 1 then
-                auplay = math.random(#announc)
-            end
-            -- Play the audio
-            SOUND:PlayOnce( "Announcers/"..cur_anounc.."/".. FolderLocation .."/"..announc[auplay] )
-        end
-    end
-end
-
+-- pick an evaluation screen based on settings.
 Branch.AfterGameplay = function()
-    local allFailed = STATSMAN:GetCurStageStats():AllFailed()
-    -- pick an evaluation screen based on settings.
-	if allFailed then
-		return "ScreenSelectMusic"
-	else
-		return Branch.EvaluationScreen()
-	end
+	return STATSMAN:GetCurStageStats():AllFailed() and "ScreenSelectMusic" or Branch.EvaluationScreen()
 end;
 GameColor.Difficulty.Beginner = color("#fee600");
 GameColor.Difficulty.Easy = color("#ff2f39");
