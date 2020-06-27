@@ -1,13 +1,13 @@
-local t = Def.ActorFrame{};
+local t = Def.ActorFrame{}
 
 local Items = {
     ["Hide"] = { "SectionCount","SongName" },
-};
+}
 
 t.OnCommand=function(self)
     SCREENMAN:GetTopScreen():GetChild("Banner"):visible(false)
 
-    local MWheel = SCREENMAN:GetTopScreen():GetChild("MusicWheel");
+    local MWheel = SCREENMAN:GetTopScreen():GetChild("MusicWheel")
     MWheel:xy( SCREEN_CENTER_X, SCREEN_CENTER_Y+109 ):draworder(1)
     -- alright we got items
     local WheelTable = MWheel:GetChild("MusicWheelItem")
@@ -23,32 +23,32 @@ t.OnCommand=function(self)
 end
 
 t.StartSelectingStepsMessageCommand=function(self)
-    local MWheel = SCREENMAN:GetTopScreen():GetChild("MusicWheel");
+    local MWheel = SCREENMAN:GetTopScreen():GetChild("MusicWheel")
     MWheel:stoptweening():linear(0.4):y(SCREEN_CENTER_Y+400 )
-end;
+end
 
 local function ReloadWheelTween()
-    local MWheel = SCREENMAN:GetTopScreen():GetChild("MusicWheel");
+    local MWheel = SCREENMAN:GetTopScreen():GetChild("MusicWheel")
     MWheel:stoptweening():linear(0.3):y(SCREEN_CENTER_Y+450 )
     :linear(0.3):y(SCREEN_CENTER_Y+109 )
 end
 
-t.NextGroupMessageCommand=function(self) ReloadWheelTween() end;
-t.PreviousGroupMessageCommand=function(self) ReloadWheelTween() end;
+t.NextGroupMessageCommand=function(self) ReloadWheelTween() end
+t.PreviousGroupMessageCommand=function(self) ReloadWheelTween() end
 
 t.SongUnchosenMessageCommand=function(self)
-    local MWheel = SCREENMAN:GetTopScreen():GetChild("MusicWheel");
+    local MWheel = SCREENMAN:GetTopScreen():GetChild("MusicWheel")
     MWheel:stoptweening():linear(0.3):y( SCREEN_CENTER_Y+109 )
-end;
+end
 
 t[#t+1] = LoadFont("ABlO")..{
     OnCommand=function(self)
         self:xy( SCREEN_CENTER_X,SCREEN_CENTER_Y-20 ):zoom(0.8):shadowlength(3)
-    end;
+    end,
     CurrentSongChangedMessageCommand=function(self)
-        local song = GAMESTATE:GetCurrentSong();
+        local song = GAMESTATE:GetCurrentSong()
         self:settext( song and song:GetDisplayMainTitle() or "" )
-    end;
-};
+    end
+}
 
-return t;
+return t

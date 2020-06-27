@@ -6,8 +6,8 @@
 ]]
 
 -- Begin by the actorframe
-local t = Def.ActorFrame{};
-local MenuIndex = 1;
+local t = Def.ActorFrame{}
+local MenuIndex = 1
 
 local MenuChoices = {
     {
@@ -37,7 +37,7 @@ local MenuChoices = {
         "Exit",
         function() SCREENMAN:NScreen( "ScreenExit" ) end,
     },
-};
+}
 
 local BTInput = {
     -- This will control the menu
@@ -46,7 +46,7 @@ local BTInput = {
     ["Start"] = function(event)
         MenuChoices[MenuIndex][2](event)
     end
-};    
+}    
 local function CheckValueOffsets()
     if MenuIndex > #MenuChoices then MenuIndex = #MenuChoices return end
     if MenuIndex < 1 then MenuIndex = 1 return end
@@ -56,34 +56,34 @@ end
 local ItemPlacement,Spacing = _screen.cy-20,36
 -- Actorframe that holds the items that the ActorScroller will handle.
 local function MainMenuChoices()
-    local t=Def.ActorFrame{};
+    local t=Def.ActorFrame{}
 
     -- This one will be the arrow selector
     t[#t+1] = LoadActor( THEME:GetPathG("","Color Arrow") )..{
         OnCommand=function(self)
             self:xy( _screen.cx-170, ItemPlacement+(Spacing*MenuIndex) ):zoomx(-1)
-        end;
+        end,
         MenuUpAllValMessageCommand=function(self)
             self:stoptweening():linear(0.05)
             self:y( ItemPlacement+(Spacing*MenuIndex) )
-        end;
-    };
+        end
+    }
 
     -- This will be out choices 
     for index,mch in ipairs( MenuChoices ) do
         t[#t+1] = Def.ActorFrame{
             OnCommand=function(self)
                 self:xy( _screen.cx, ItemPlacement+(Spacing*index) )
-            end;
+            end,
             Def.BitmapText{
-                Font="ABlO", Text=string.upper(mch[1]);
+                Font="ABlO", Text=string.upper(mch[1]),
                 OnCommand=function(self)
                     self:shadowlength(3)
-                end;
-            };
-        };
+                end
+            }
+        }
     end
-    return t;
+    return t
 end
     
 local function InputHandler(event)
@@ -105,45 +105,45 @@ local Controller = Def.ActorFrame{
     for player in ivalues(PlayerNumber) do
         GAMESTATE:UnjoinPlayer(player)
     end
-end;
-};
+end
+}
 
 t[#t+1] = LoadActor( THEME:GetPathV("","title screen bg") )..{
-    OnCommand=function(self) self:FullScreen() end
-};
+    OnCommand=function(self) self:stretchto(SCREEN_WIDTH,SCREEN_HEIGHT,0,0) end
+}
 
 t[#t+1] = LoadActor( THEME:GetPathG("","Logo/Logo.png") )..{
-    OnCommand=function(self) self:CenterX():y(_screen.cy-130) end;
-};
+    OnCommand=function(self) self:xy(_screen.cx,_screen.cy-130) end
+}
 
 t[#t+1] = LoadActor( THEME:GetPathG("","Logo/Max.png") )..{
     OnCommand=function(self)
         self:xy(_screen.cx+140,_screen.cy-25):glowshift():effectperiod(2)
         :zoomx(3):zoomy(0):sleep(0.5):linear(0.5):zoom(1)
     end
-};
+}
 
 t[#t+1] = Def.BitmapText{
-    Font="black wolf";
-    Text="v0.95";
+    Font="black wolf",
+    Text="v0.95",
     OnCommand=function(self)
         self:xy(_screen.cx+245,_screen.cy+210)
         :diffuse(0.8,0.8,0.8,1):shadowlength(3)
     end
-};
+}
 
 t[#t+1] = Def.BitmapText{
-    Font="Arial Bold";
-    Text="Use &UP; &DOWN; to select, then press NEXT";
+    Font="Arial Bold",
+    Text="Use &UP; &DOWN; to select, then press NEXT",
     OnCommand=function(self)
         self:xy(_screen.cx,_screen.cy+200):zoom(0.7)
         :shadowlength(3):diffuseblink()
     end
-};
+}
 
 SOUND:PlayAnnouncer("title menu game name")
 
 t[#t+1] = MainMenuChoices()
-t[#t+1] = Controller;
+t[#t+1] = Controller
 
-return t;
+return t

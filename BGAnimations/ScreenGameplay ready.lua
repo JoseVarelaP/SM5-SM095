@@ -8,20 +8,20 @@ t[#t+1] = LoadActor( THEME:GetPathG("","Gameplay/Ready") )..{
         self:shadowlength(3)
         self:xy(_screen.cx+SpacingX,_screen.cy-SpacingY):diffusealpha(0):sleep(0.2):linear(SlideTime):Center():diffusealpha(1)
         :sleep(0.4):linear(SlideTime):xy(_screen.cx+SpacingX,_screen.cy-SpacingY):diffusealpha(0)
-    end;
-}; 
+    end
+}
 t[#t+1] = LoadActor( THEME:GetPathG("","Gameplay/Ready") )..{
     OnCommand=function(self)
         self:shadowlength(3)
         self:Center():diffusealpha(0):sleep(0.2):linear(SlideTime):diffusealpha(1):sleep(0.4):linear(SlideTime):diffusealpha(0)
-    end;
-}; 
+    end
+}
 t[#t+1] = LoadActor( THEME:GetPathG("","Gameplay/Ready") )..{
     OnCommand=function(self)
         self:shadowlength(3)
         self:xy(_screen.cx-SpacingX,_screen.cy+SpacingY):diffusealpha(0):sleep(0.2):linear(SlideTime):Center():diffusealpha(1)
         :sleep(0.4):linear(SlideTime):xy(_screen.cx-SpacingX,_screen.cy+SpacingY):diffusealpha(0)
-    end;
-};
+    end
+}
 
-return t;
+return t
